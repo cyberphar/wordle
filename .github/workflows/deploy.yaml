@@ -1,0 +1,128 @@
+name: Deploy Repository and Configure Secrets
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Remove the repository
+        uses: appleboy/ssh-action@v0.1.4
+
+        with:
+          host: ${{ secrets.SSH_IP_ADDR }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Step 1: Backup the old version in /tmp
+            mv /var/deploy/wordle /tmp/wordle-backup
+            echo "The old version of the back-end has been backed up in /tmp/wordle-backup."
+
+            # Step 2: Remove the old version
+            rm -rf /var/deploy/wordle
+            echo "The old version of the back-end has been removed."
+
+            # Step 3: Create a new folder for the new version
+            mkdir /var/deploy/wordle
+            echo "A new folder for the new version of the back-end has been created."
+
+
+      - name: Deploy files via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          server: ${{ secrets.SSH_IP_ADDR }}
+          port: ${{ secrets.SSH_PORT }}
+          local_path: "./*"
+          remote_path: "/var/deploy/wordle"
+          sftpArgs: "-o ConnectTimeout=5"
+          sftp_only: false
+          delete_remote_files: true
+
+      - name: Configure secrets and restart services
+        uses: appleboy/ssh-action@v0.1.4
+
+        with:
+          host: ${{ secrets.SSH_IP_ADDR }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Step 0: Remove the previous wordle and down the docker compose
+            screen -S wordle -X quit
+
+            # Step 2: Check if the screen session was successfully killed
+            if [ $? -eq 0 ]; then
+            echo "Successfully killed the screen session named 'wordle'."
+            else
+            echo "Unable to kill the screen session named 'wordle'. It may not have existed."
+            fi
+
+            # Go to the correct folder
+            cd /var/deploy/wordle
+
+            # Wait a moment to ensure the session is terminated
+            sleep 1
+
+            # Create the .env file
+            # rm .env
+            # touch .env
+            # echo "${{ secrets.ENV_FILE }}" > .env
+
+            # Install dependancies
+            # Check if the virtual environment exists
+            if [ -d ".venv" ]; then
+            echo "The virtual environment already exists."
+            else
+            echo "The virtual environment does not exist. Creating it now."
+            python3 -m venv .venv
+            fi
+
+            # Activate the virtual environment and install the requirements
+            source .venv/bin/activate
+
+            if [ $? -eq 0 ]; then
+            echo "Successfully activated the virtual environment."
+            else
+            echo "Failed to activate the virtual environment."
+            exit 1
+            fi
+
+            # Install the requirements
+            pip3 install -r requirements.txt
+
+            if [ $? -eq 0 ]; then
+            echo "Successfully installed the requirements."
+            else
+            echo "Failed to install the requirements."
+            exit 1
+            fi
+
+            # Deactivate the virtual environment
+            deactivate
+
+            if [ $? -eq 0 ]; then
+            echo "Successfully deactivated the virtual environment."
+            else
+            echo "Failed to deactivate the virtual environment."
+            exit 1
+            fi
+
+            # Start the wordle
+            screen -S wordle -d -m bash -c "source .venv/bin/activate && python3 app.py -p 5000"
+
+            if [ $? -eq 0 ]; then
+            echo "Successfully started the wordle."
+            else
+            echo "Failed to start the wordle."
+            exit 1
+            fi
+            
