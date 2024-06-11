@@ -41,15 +41,37 @@ h1 {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.attempts {
+.word-form {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
 }
-.attempt {
+
+#wordle-form input {
+    width: 50%;
+    max-width: 300px;
     padding: 10px;
-    border-bottom: 1px solid #EEE;
-    display: flex;
-    justify-content: space-between;
+    font-size: 1.2em;
+    text-align: center;
 }
+
+.attempts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.attempt {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+
+}
+
 .well-placed {
     color: #042940;
 }
@@ -74,6 +96,10 @@ h1 {
     margin: 2px;
     border: 1px solid #333;
     cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.2em;
+    border-radius: 5px;
 }
 .letter.green {
     background-color: #042940;
@@ -122,3 +148,35 @@ button {
 .popup.show {
     opacity: 1;
 }
+.small-btn {
+    width: 61.2px;
+    height: 31.6px;
+    margin-top: 2px;
+    margin-bottom: 0%;
+    padding-bottom: 2px;
+    border: 1px solid #333;
+    margin-right: 5px;
+    
+
+    /* Le reste de votre code CSS ici */
+}
+.letter-box {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#enter {
+    margin-left: 0px;
+}
+#backspace {
+    margin-right: 0px;
+}
+

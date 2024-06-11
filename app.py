@@ -162,7 +162,7 @@ def play_wordle():
         if username in users['users']:
             word = users['users'][username]['word']
             wordtry = data['word']
-
+            wordtry = wordtry.lower()
             if wordtry not in words or len(word) != len(wordtry):
                 return jsonify(success=False, message="Le mot n'est pas dans la liste ou la longueur est incorrecte")
 
