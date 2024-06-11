@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}" class="btn">Accueil</a>
+        <span class="username">{{ session['username'] }}</span>
+        
+    </header>
+    <h1>Wordle Game</h1>
+    <div class="container">
+        <div class="attempts">
+            <div id="attempts-list">
+                <!-- On préremplit les lignes -->
+                {% for _ in range(5) %}
+                    <div class="attempt">
+                        {% for _ in range(5) %}
+                            <span class="blank">_</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <form id="wordle-form">
+            <input type="text" id="word" name="word" required>
+        </form>
+        <div id="result"></div>
+        <div class="alphabet" id="alphabet">
+            <div class="row">
+                {% for letter in "azertyuiop" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for letter in "qsdfghjklm" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+            </div>
+            <div class="row"> 
+                <button id="enter">Enter</button>
+                {% for letter in "wxcvbn" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <button id="backspace">Retour arrière</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="popup"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des utilisateurs</title>
+</head>
+<body>
+    <h1>Gestion des utilisateurs</h1>
+    <h2>Liste des utilisateurs</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Équipe</th>
+                <th>Mot</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for username, user in users.items() %}
+                <tr>
+                    <td>{{ username }}</td>
+                    <td>{{ user.equipe }}</td>
+                    <td>{{ user.word }}</td>
+                    <td>
+                        <button onclick="updateWord('{{ username }}')">Générer un nouveau mot</button>
+                        <button onclick="deleteUser('{{ username }}')">Supprimer</button>
+                        <button onclick="updatePassword('{{ username }}')">Changer le mot de passe</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Ajouter un nouvel utilisateur</h2>
+    <form id="addUserForm">
+        <label for="newUsername">Nom d'utilisateur:</label>
+        <input type="text" id="newUsername" required>
+        <label for="newPassword">Mot de passe:</label>
+        <input type="password" id="newPassword" required>
+        <label for="newEquipe">Équipe:</label>
+        <input type="text" id="newEquipe" required>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <script>
+        function updateWord(username) {
+            fetch('/gestion_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'update_word', username: username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la mise à jour du mot.');
+                }
+            });
+        }
+
+        function deleteUser(username) {
+            fetch('/gestion_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'delete', username: username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la suppression de l\'utilisateur.');
+                }
+            });
+        }
+
+        function updatePassword(username) {
+            const newPassword = prompt("Entrez le nouveau mot de passe pour " + username + ":");
+            if (newPassword) {
+                fetch('/gestion_users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'update_password', username: username, new_password: newPassword })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Mot de passe mis à jour avec succès.');
+                    } else {
+                        alert('Erreur lors de la mise à jour du mot de passe.');
+                    }
+                });
+            }
+        }
+
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const newEquipe = document.getElementById('newEquipe').value;
+
+            fetch('/gestion_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'add', username: newUsername, password: newPassword, equipe: newEquipe })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout de l\'utilisateur.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

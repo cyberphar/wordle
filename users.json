@@ -1,0 +1,32 @@
+{
+    "users": {
+        "admin": {
+            "equipe": "admin",
+            "password": "password",
+            "word": "forme",
+            "attempt": [
+                "tonds",
+                "force",
+                "forme"
+            ]
+        },
+        "user": {
+            "equipe": "test",
+            "password": "caca",
+            "word": "tonds",
+            "attempt": []
+        },
+        "equipe1": {
+            "equipe": "equipe1",
+            "password": "voila",
+            "word": "canin",
+            "attempt": []
+        },
+        "equipe2": {
+            "password": "ouioui",
+            "equipe": "equipe2",
+            "word": "crues",
+            "attempt": []
+        }
+    }
+}

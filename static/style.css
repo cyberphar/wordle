@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    color: #042940;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+.username {
+    margin-left: 20px;
+}
+.btn {
+    background-color: #042940;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+.btn:hover {
+    background-color: #9FC131;
+}
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #FFF;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.attempts {
+    margin-top: 20px;
+}
+.attempt {
+    padding: 10px;
+    border-bottom: 1px solid #EEE;
+    display: flex;
+    justify-content: space-between;
+}
+.well-placed {
+    color: #042940;
+}
+.in-word {
+    color: #9FC131;
+}
+.out {
+    color: #D6D58E;
+}
+.alphabet {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+.letter {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+.letter.green {
+    background-color: #042940;
+    color: white;
+}
+.letter.orange {
+    background-color: #9FC131;
+    color: white;
+}
+.letter.red {
+    background-color: #D6D58E;
+    color: white;
+}
+.letter.grey {
+    background-color: grey;
+    color: white;
+}
+.row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+button {
+    width: 120px; /* Ajustement de la largeur des boutons pour une meilleure visibilité sur mobile */
+    height: 40px; /* Ajustement de la hauteur des boutons pour une meilleure accessibilité sur mobile */
+    margin: 5px; /* Augmentation de la marge entre les boutons */
+    border: none;
+    cursor: pointer;
+    background-color: #9FC131; /* Couleur des boutons en vert clair */
+    color: #042940; /* Texte des boutons en vert foncé */
+    border-radius: 5px;
+}
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1000;
+}
+.popup.show {
+    opacity: 1;
+}

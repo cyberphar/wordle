@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page d'accueil</title>
+</head>
+<body>
+    {% if 'username' in session %}
+        <p>Bonjour, {{ session['username'] }} !</p>
+    <h1>Bienvenue sur Wordle !</h1>
+    <ul>
+        <li><a href="/play_wordle">Jouer à Wordle</a></li>
+        <li><a href="/view_results">Voir les résultats</a></li>
+        {% if session['username'] == 'admin' %}
+        <li><a href="/admin_results">Modifier les scores</a></li>
+        <li><a href="/gestion_users">Gestion des utilisateurs</a></li>
+        {% endif %}
+    </ul>
+    
+   
+    </ul>
+    
+    <p><a href="/logout">Se déconnecter</a></p>
+    {% else %}
+        <p>Veuillez vous <a href="/login">connecter</a>.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "admin": {
+        "score": 10
+    },
+    "test": {
+        "score": 4
+    },
+    "equipe1": {
+        "score": 5
+    },
+    "equipe2": {
+        "score": 0
+    }
+}
