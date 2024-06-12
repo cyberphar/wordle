@@ -126,7 +126,7 @@ def gestion_user():
         data = request.json
         users = read_users()
         if data['action'] == 'add':
-            users['users'][data['username']] = {'password': data['password'], 'equipe': data['equipe'], 'word': get_word(), 'attempt': []}
+            users['users'][data['username']] = {'password': data['password'], 'equipe': data['equipe'], 'word': get_word(), 'attempt': [], 'score': 0}
             write_users(users)
             scores = read_scores()
             scores[data['equipe']] = {'score': 0}
@@ -206,7 +206,11 @@ def play_wordle():
                             alphabet[attempt[i]] = 'orange'
                     else:
                         alphabet[attempt[i]] = 'red'
-
+            if wordtry == word or len(attempts) >= 5:
+                scores = read_scores()
+                scores[session['equipe']]['score'] += 6 - len(attempts)
+                write_scores(scores)
+                
             game_won = wordtry == word
             game_over = game_won or len(attempts) >= 5
 
@@ -237,14 +241,25 @@ def get_attempts_colors():
             well_placed = []
             in_word = []
             out = []
-
+            temp = []
+            temp_attempt = []
             for i in range(len(word)):
                 if attempt[i] == word[i]:
-                    well_placed.append(attempt[i])
-                elif attempt[i] in word:
-                    in_word.append(attempt[i])
-                else:
+                    well_placed.append(i)
+                elif attempt[i] not in word:
                     out.append(attempt[i])
+                    temp.append(word[i])
+                else:
+                    temp.append(word[i])
+                    temp_attempt.append(attempt[i])
+            print(temp, temp_attempt)
+            for i in range(len(temp)):
+                for j in range(len(temp_attempt)):
+                    if temp[i] == temp_attempt[j]:
+                        in_word.append(temp[i])
+                        del temp_attempt[j]
+                        break
+
 
             if attempt == word:
                 game_won = True
@@ -257,7 +272,7 @@ def get_attempts_colors():
             })
 
         game_over = game_won or len(attempts) >= 5
-
+        print(response)
         return jsonify(success=True, attempts=response, game_won=game_won, game_over=game_over)
 
     return jsonify(success=False, message="L'utilisateur n'existe pas")

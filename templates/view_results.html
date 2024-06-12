@@ -4,15 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats des équipes</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <header>
+        <a href="{{ url_for('index') }}" class="btn" class="header">Accueil</a>
+        <span class="username" class="header">{{ session['username'] }}</span>
+        <a href="/logout" class="btn" class="header">Se déconnecter</a>
+        
+    </header>
     <h1>Résultats Wordle</h1>
-    {% if scores %}
-        {% for score, value in scores.items() %}
-            <p>{{ score }} : {{ value }}</p>
-        {% endfor %}
-    {% else %}
-        <p>Aucun résultat à afficher.</p>
-    {% endif %}
+    <div class="scores container">
+        {% if scores %}
+            {% set colors = ['#042940', '#005C53', '#9FC131', '#DBF227', '#D6D58E', '#FFA500', '#FFFF00', '#008000', '#0000FF'] %}
+            <div class="score-container">
+                {% for score, value in scores.items() %}
+                {% if score != 'admin' and score != 'test' %}
+                    <div class="score">
+                        <div class="bar" style="height: {{ value * 10}}px; background-color: {{ colors[loop.index0 % colors|length] }};"></div>
+                        <span class="team">{{ score }}</span>
+                        <span class="value">{{ value }}</span>
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun résultat à afficher.</p>
+        {% endif %}
+    </div>
+    
 </body>
 </html>

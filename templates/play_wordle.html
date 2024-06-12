@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    {% if 'username' in session %}
     <header>
-        <a href="{{ url_for('index') }}" class="btn">Accueil</a>
-        <span class="username">{{ session['username'] }}</span>
+        <a href="{{ url_for('index') }}" class="btn" class="header">Accueil</a>
+        <span class="username" class="header">{{ session['username'] }}</span>
+        <a href="/logout" class="btn" class="header">Se déconnecter</a>
         
     </header>
-    <h1>Wordle Game</h1>
+    <h1 class="title">Wardlexis Game</h1>
     <div class="container">
         <div class="attempts">
             <div id="attempts-list">
@@ -35,12 +37,12 @@
         <div id="result"></div>
         <div class="alphabet" id="alphabet">
             <div class="row">
-                {% for letter in "AZERTYUIOP" %}
+                {% for letter in "azertyuiop" %}
                     <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
                 {% endfor %}
             </div>
             <div class="row">
-                {% for letter in "QSDFGHJKLM" %}
+                {% for letter in "qsdfghjklm" %}
                     <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
                 {% endfor %}
             </div>
@@ -60,5 +62,8 @@
     <div id="popup" class="popup"></div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script type="text/javascript" src="https://livejs.com/live.js"></script>
+    {% else %}
+        <meta http-equiv="refresh" content="0; url={{ url_for('index') }}">
+    {% endif %}
 </body>
 </html>

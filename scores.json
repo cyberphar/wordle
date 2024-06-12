@@ -1,14 +1,17 @@
 {
     "admin": {
-        "score": 10
+        "score": 33
     },
     "test": {
-        "score": 4
+        "score": 40
     },
     "equipe1": {
         "score": 5
     },
     "equipe2": {
+        "score": 0
+    },
+    "helene": {
         "score": 0
     }
 }

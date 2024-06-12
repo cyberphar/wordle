@@ -4,19 +4,16 @@
             "equipe": "admin",
             "password": "password",
             "word": "forme",
-            "attempt": [
-                "tests",
-                "raies",
-                "vites",
-                "force",
-                "forme"
-            ]
+            "attempt": [],
+            "points": 0
         },
         "user": {
             "equipe": "test",
-            "password": "caca",
-            "word": "tonds",
-            "attempt": []
+            "password": "user",
+            "word": "robes",
+            "attempt": [
+                "robes"
+            ]
         },
         "equipe1": {
             "equipe": "equipe1",
@@ -28,6 +25,12 @@
             "password": "ouioui",
             "equipe": "equipe2",
             "word": "crues",
+            "attempt": []
+        },
+        "helene": {
+            "password": "heyhey",
+            "equipe": "helene",
+            "word": "mimer",
             "attempt": []
         }
     }

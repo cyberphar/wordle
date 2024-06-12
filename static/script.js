@@ -4,7 +4,7 @@ function showPopup(message) {
     popup.classList.add('show');
     setTimeout(() => {
         popup.classList.remove('show');
-    }, 3000);
+    }, 5000);
 }
 
 function disableForm() {
@@ -13,6 +13,9 @@ function disableForm() {
         form.remove();
     }
 }
+
+
+
 
 document.getElementById('wordle-form').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -44,23 +47,27 @@ document.getElementById('wordle-form').addEventListener('submit', function(event
             }
             const newAttempt = document.createElement('div');
             newAttempt.className = 'attempt';
-            newAttempt.innerHTML = resultHtml;
-            document.getElementById('attempts-list').appendChild(newAttempt);
+            //newAttempt.innerHTML = resultHtml;
+            //document.getElementById('attempts-list').appendChild(newAttempt);
             wordInput.value = '';
 
             for (let letter in data.alphabet) {
                 const element = document.getElementById(`letter-${letter}`);
-                element.className = `letter ${data.alphabet[letter]}`;
-            }
-
-            if (data.game_over) {
-                disableForm();
-                if (data.game_won) {
-                    showPopup('Félicitations ! Vous avez trouvé le mot !');
-                } else {
-                    showPopup('Nombre maximum de tentatives atteint.');
+                if (element) {
+                    element.className = `letter ${data.alphabet[letter]}`;
                 }
             }
+            
+            if (data.game_over) {
+                disableForm();
+                console.log(data.attempts.length);
+                if (data.game_won) {
+                    showPopup('Félicitations ! Vous avez trouvé le mot ! Vous remportez ' + (6 - data.attempts.length) + ' points !');
+                } else {
+                    showPopup('Nombre maximum de tentatives atteint. Le mot était : ' + data.word + '. Vous avez gagné 1 point.');
+                }
+            }
+            loadAttempts();
         } else {
             showPopup(data.message);
         }
@@ -94,33 +101,42 @@ function loadAttempts() {
     .then(data => {
         if (data.success) {
             const attemptsList = document.getElementById('attempts-list');
-            attemptsList.innerHTML = ''; // Clear previous attempts
+            const attemptDivs = attemptsList.getElementsByClassName('attempt');
 
-            data.attempts.forEach(attemptData => {
-                const attemptDiv = document.createElement('div');
-                attemptDiv.className = 'attempt';
-
+            data.attempts.forEach((attemptData, index) => {
+                const letterBoxes = attemptDivs[index].getElementsByClassName('letter-box');
                 attemptData.attempt.split('').forEach((letter, i) => {
-                    const span = document.createElement('span');
+                    const span = letterBoxes[i].getElementsByTagName('span')[0];
                     span.textContent = letter;
-                    if (i in attemptData.well_placed) {
+                    
+                    if (attemptData.well_placed.includes(i)) {
+                        
                         span.className = 'well-placed';
+                        // Colore dans l'alpabet la lettre bien placée
+                        var element = document.getElementById(`letter-${letter}`);
+                        if (element) {
+                            
+                            element.className = 'letter green';
+                        }
+
                     } else if (attemptData.in_word.includes(letter)) {
                         span.className = 'in-word';
+                        var element = document.getElementById(`letter-${letter}`);
+                        if (element) {
+                            element.className = 'letter orange';
+                        }
+                        delete attemptData.in_word[attemptData.in_word.indexOf(letter)];
                     } else {
                         span.className = 'out';
+                        var element = document.getElementById(`letter-${letter}`);
+                        if (element) {
+                            element.className = 'letter red';
+                        }
                     }
-                    attemptDiv.appendChild(span);
                 });
-
-                attemptsList.appendChild(attemptDiv);
             });
 
-            // Mise à jour des couleurs du clavier
-            for (let letter in data.alphabet) {
-                const element = document.getElementById(`letter-${letter}`);
-                element.className = `letter ${data.alphabet[letter]}`;
-            }
+          
 
             // Supprimer le formulaire si le jeu est gagné ou le nombre maximum de tentatives est atteint
             if (data.game_over) {
@@ -130,6 +146,11 @@ function loadAttempts() {
             showPopup(data.message);
         }
     });
+    var element = document.getElementById('word');
+    if (element) {
+        element.focus();
+    }
+
 }
 
 window.onload = function() {

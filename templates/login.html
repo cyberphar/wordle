@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="POST" action="http://127.0.0.1:5000/login">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Login</button>
-    </form>
+    <h1>Wardlexis</h1>
+    <div class="container">
+        <form method="POST" action="http://127.0.0.1:5000/login" class="login-form">
+            <label for="username" class="login-label">Pseudo:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password" class="login-label">Mot de passe:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button type="submit" class="btn-login">Connexion</button>
+        </form>
+    </div>
 </body>
 </html>

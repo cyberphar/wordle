@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page d'accueil</title>
+    <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     {% if 'username' in session %}
-        <p>Bonjour, {{ session['username'] }} !</p>
-    <h1>Bienvenue sur Wordle !</h1>
-    <ul>
-        <li><a href="/play_wordle" class="btn">Jouer à Wordle</a></li>
-        <li><a href="/view_results" class="btn">Voir les résultats</a></li>
+    <header>
+        <a href="{{ url_for('index') }}" class="btn" class="header">Accueil</a>
+        <span class="username" class="header">{{ session['username'] }}</span>
+        <a href="/logout" class="btn" class="header">Se déconnecter</a>
+        
+    </header>
+    <h1>Bienvenue sur Wardlexis !</h1>
+    <div class="container">
+        <p>Wardlexis est un jeu de mots où vous devez deviner un mot de 5 lettres en 5 tentatives.</p>
+        <p>Chaque lettre correcte est en bleu, chaque lettre correcte mais mal placée est en vert, et chaque lettre incorrecte est en jaune.</p>
+        <p>Vous pouvez jouer autant de fois que vous le souhaitez, mais seules vos 5 meilleures tentatives seront prises en compte.</p>
+    
+    <div class="menu">
+        <a href="/play_wordle" class="btn">Jouer à Wardlexis</a>
+        <a href="/view_results" class="btn">Voir les résultats</a>
         {% if session['username'] == 'admin' %}
-        <li><a href="/admin_results" class="btn">Modifier les scores</a></li>
-        <li><a href="/gestion_users" class="btn">Gestion des utilisateurs</a></li>
+        <a href="/admin_results" class="btn">Modifier les scores</a>
+        <a href="/gestion_users" class="btn">Gestion des utilisateurs</a>
         {% endif %}
-    </ul>
+    </div>
+</div>
 
-    <p><a href="/logout" class="btn">Se déconnecter</a></p>
     {% else %}
-        <p>Veuillez vous <a href="/login" class="btn">connecter</a>.</p>
+        <meta http-equiv="refresh" content="0; URL='/'" />
     {% endif %}
 </body>
 </html>
