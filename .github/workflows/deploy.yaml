@@ -1,0 +1,77 @@
+name: Deploy Repository and Configure Secrets
+
+on:
+  push:
+    branches:
+      - Hydrocarbure-H-patch-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Remove the repository
+        uses: appleboy/ssh-action@v0.1.4
+
+        with:
+          host: ${{ secrets.SSH_IP_ADDR }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Step 1: Backup the old version in /tmp
+            mv /var/deploy/wordle /tmp/wordle-backup
+            echo "The old version of the back-end has been backed up in /tmp/wordle-backup."
+
+            # Step 2: Remove the old version
+            rm -rf /var/deploy/wordle
+            echo "The old version of the back-end has been removed."
+
+            # Step 3: Create a new folder for the new version
+            mkdir /var/deploy/wordle
+            echo "A new folder for the new version of the back-end has been created."
+
+      - name: Deploy files via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          server: ${{ secrets.SSH_IP_ADDR }}
+          port: ${{ secrets.SSH_PORT }}
+          local_path: "./*"
+          remote_path: "/var/deploy/wordle"
+          sftpArgs: "-o ConnectTimeout=5"
+          sftp_only: false
+          delete_remote_files: true
+
+      - name: Build and Run Docker Container
+        uses: appleboy/ssh-action@v0.1.4
+
+        with:
+          host: ${{ secrets.SSH_IP_ADDR }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Step 1: Stop and remove any existing container
+            docker stop flask-app || true
+            docker rm flask-app || true
+
+            # Step 2: Navigate to the project directory
+            cd /var/deploy/wordle
+
+            # Step 3: Build the Docker image
+            /usr/bin/docker build -t flask-app .
+
+            # Step 4: Run the Docker container
+            /usr/bin/docker run -p 5005:5005 --user 1000:1000 --restart=always --network host -d --name flask-app flask-app
+
+            # Step 5: Verify the container is running
+            if docker ps | grep -q flask-app; then
+              echo "Successfully started the flask-app container."
+            else
+              echo "Failed to start the flask-app container."
+              exit 1
+            fi
