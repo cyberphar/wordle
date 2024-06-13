@@ -1,0 +1,154 @@
+/* style_test.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: #042940;
+    text-align: center;
+    margin-top: 2%;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    background-color: #042940;
+    color: white;
+    padding: 1%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.username {
+    padding: 5px 10px;
+    text-align: center;
+}
+
+.btn {
+    background-color: #042940;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin: 0 10px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:hover {
+    background-color: #9FC131;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    background-color: #FFF;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.score-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color:#042940;
+    color: #fff;
+}
+
+.team {
+    flex-grow: 1;
+    font-weight: bold;
+    color: inherit; /* Inherit color from parent */
+}
+
+.current-user {
+    background-color: #D6D58E; /* Color for the current user's team */
+    color: #333;
+}
+
+.value {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    header {
+        width: 100%;
+        padding: 2%;
+    }
+
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+    .score {
+        flex-direction: row; /* Ensure row layout even on small screens */
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px; /* Reduce padding */
+        margin: 5px 0; /* Reduce margin */
+    }
+
+    .team, .value {
+        font-size: 1em; /* Adjust font size */
+    }
+}
+.team-up {
+    animation: move-up 2s ease-in-out;
+}
+
+.team-down {
+    animation: move-down 2s ease-in-out;
+}
+
+@keyframes move-up {
+    from {
+        transform: translateY(10px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes move-down {
+    from {
+        transform: translateY(-10px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+.laurier img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-top: 0px;
+}

@@ -76,6 +76,14 @@ def logout():
     session.pop('equipe', None)
     return render_template('login.html')
 
+@app.route('/get_score', methods=['GET'])
+def get_score():
+    if 'username' not in session:
+        return jsonify(success=False, message="Non connecté")
+    users_scores = read_scores()
+    score = {team: users_scores[team]['score'] for team in users_scores if team != 'admin' and team != 'test'}
+    return jsonify(success=True, score=score)
+
 @app.route('/view_results')
 def view_results():
     if 'username' not in session:
@@ -86,8 +94,9 @@ def view_results():
         score = {}
         for team in users_scores:
             score[team] = users_scores[team]['score']
-
-    return render_template('view_results.html', scores=score)
+    
+        return render_template('view_results.html', scores=score)
+    return jsonify(success=False)
 
 @app.route('/admin_results')
 def admin_results():
@@ -210,7 +219,7 @@ def play_wordle():
                 scores = read_scores()
                 scores[session['equipe']]['score'] += 6 - len(attempts)
                 write_scores(scores)
-                
+
             game_won = wordtry == word
             game_over = game_won or len(attempts) >= 5
 
