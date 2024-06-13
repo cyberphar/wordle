@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/flask_session
+#RUN mkdir -p /app/flask_session
 
-RUN chown -R 1000:1000 /app/flask_session
-RUN chmod -R 700 /app/flask_session
+#RUN chown -R 1000:1000 /app/flask_session
+#RUN chmod -R 700 /app/flask_session
 
 # Set the user to use when running the image
-USER 1000:1000
+#USER 1000:1000
 
 WORKDIR /app
 
