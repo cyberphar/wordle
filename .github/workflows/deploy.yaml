@@ -63,10 +63,10 @@ jobs:
             cd /var/deploy/wordle
 
             # Step 3: Build the Docker image
-            docker build -t flask-app .
+            /usr/bin/docker build -t flask-app .
 
             # Step 4: Run the Docker container
-            docker run -p 5005:5005 --user 1000:1000 --restart=always --network host -d --name flask-app flask-app
+            /usr/bin/docker run -p 5005:5005 --user 1000:1000 --restart=always --network host -d --name flask-app flask-app
 
             # Step 5: Verify the container is running
             if docker ps | grep -q flask-app; then
