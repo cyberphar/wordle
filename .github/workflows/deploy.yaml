@@ -3,7 +3,7 @@ name: Deploy Repository and Configure Secrets
 on:
   push:
     branches:
-      - Hydrocarbure-H-patch-1
+      - main
 
 jobs:
   deploy:
