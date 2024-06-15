@@ -8,7 +8,9 @@ body {
     flex-direction: column;
     align-items: center;
 }
-
+.menu .btn {
+    margin: auto 10px;
+}
 h1 {
     color: #042940;
     display: flex;
@@ -339,8 +341,7 @@ input[type="password"]:focus {
     }
     .menu .btn {
         justify-content: space-around;
-        border-radius: 10%;
-        margin: auto 10px;
+        border-radius: 5%;
     }
     .popup {
         position: fixed;
