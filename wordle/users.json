@@ -4,18 +4,19 @@
             "equipe": "admin",
             "password": "password",
             "word": "forme",
-            "attempt": [
-                "tests"
-            ]
+            "attempt": [],
+            "points": 0
         },
         "user": {
             "equipe": "test",
             "password": "user",
-            "word": "ligna",
-            "attempt": []
+            "word": "robes",
+            "attempt": [
+                "robes"
+            ]
         },
         "equipe1": {
-            "equipe": "caroot",
+            "equipe": "equipe1",
             "password": "voila",
             "word": "canin",
             "attempt": []
@@ -31,13 +32,6 @@
             "equipe": "helene",
             "word": "mimer",
             "attempt": []
-        },
-        "ouioui": {
-            "password": "ouioui",
-            "equipe": "caroot",
-            "word": "larve",
-            "attempt": [],
-            "score": 0
         }
     }
 }

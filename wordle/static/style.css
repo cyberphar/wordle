@@ -339,15 +339,6 @@ input[type="password"]:focus {
     }
     .menu .btn {
         justify-content: space-around;
-        border-radius: 10%;
-        margin: auto 10px;
-    }
-    .popup {
-        position: fixed;
-        top: 20%;
-        left: 50%;
-        width: 250px;
-    ;
-
+        border-radius: 0%;
     }
 }

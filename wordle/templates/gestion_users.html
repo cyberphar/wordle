@@ -27,7 +27,6 @@
                         <button onclick="updateWord('{{ username }}')">Générer un nouveau mot</button>
                         <button onclick="deleteUser('{{ username }}')">Supprimer</button>
                         <button onclick="updatePassword('{{ username }}')">Changer le mot de passe</button>
-                        <button onclick="update_team_name('{{ username }}')">Changer le nom d'équipe</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -62,27 +61,6 @@
                     alert('Erreur lors de la mise à jour du mot.');
                 }
             });
-        }
-
-        function update_team_name(username) {
-            const newEquipe = prompt("Entrez le nouveau nom d'équipe pour " + username + ":");
-            if (newEquipe) {
-                fetch('/gestion_users', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: 'update_team_name', username: username, new_team_name: newEquipe })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Nom d\'équipe mis à jour avec succès.');
-                    } else {
-                        alert('Erreur lors de la mise à jour du nom d\'équipe.');
-                    }
-                });
-            }
         }
 
         function deleteUser(username) {
@@ -146,8 +124,6 @@
                 }
             });
         });
-
-
     </script>
 </body>
 </html>

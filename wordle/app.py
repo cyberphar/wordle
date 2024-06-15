@@ -156,21 +156,6 @@ def gestion_user():
                 users['users'][data['username']]['password'] = data['new_password']
                 write_users(users)
                 return jsonify(success=True)
-            
-        # Changer le nom de l'équipe
-        elif data['action'] == 'update_team_name':
-            if data['username'] in users['users']:
-                old_equipe = users['users'][data['username']]['equipe']
-                scores = read_scores()
-                scores[data['new_team_name']] = scores[old_equipe]
-                del scores[old_equipe]
-                write_scores(scores)
-                for user in users['users']:
-                    if users['users'][user]['equipe'] == old_equipe:
-                        users['users'][user]['equipe'] = data['new_team_name']
-                write_users(users)
-                return jsonify(success=True)
-            
         return jsonify(success=False)
     
 @app.route('/play_wordle', methods=['GET', 'POST'])
@@ -237,14 +222,6 @@ def play_wordle():
 
             game_won = wordtry == word
             game_over = game_won or len(attempts) >= 5
-            if game_over and username == 'user':
-                users['users'][username]['word'] = get_word()
-                users['users'][username]['attempt'] = []
-                write_users(users)
-                return jsonify(success=True, well_placed=well_placed, in_word=in_word, out=out, alphabet=alphabet, attempts=attempts, game_won=game_won, game_over=game_over, new_word=users['users'][username]['word'], word=word)
-            
-            if game_over:
-                return jsonify(success=True, well_placed=well_placed, in_word=in_word, out=out, alphabet=alphabet, attempts=attempts, game_won=game_won, game_over=game_over, word=word)
 
             return jsonify(success=True, well_placed=well_placed, in_word=in_word, out=out, alphabet=alphabet, attempts=attempts, game_won=game_won, game_over=game_over)
 
@@ -312,4 +289,4 @@ def get_attempts_colors():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, port=5005)

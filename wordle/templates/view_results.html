@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats des équipes</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_test.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}" class="btn header">Accueil</a>
+        <span class="username header">{{ session['username'] }}</span>
+        <a href="/logout" class="btn header">Déconnexion</a>
+    </header>
+    <h1>Résultats Wordle</h1>
+    <div class="scores container">
+        {% if scores %}
+            <div class="score-container">
+                {% for score, value in scores|dictsort(reverse=True, by='value') %}
+                    {% if score != 'admin' and score != 'test' %}
+                        <div class="score {% if score == session['username'] %}current-user{% endif %}" id="{{ score.replace(' ', '-') }}">
+                            <span class="team">{{ score }}</span>
+                            <span class="laurier"></span>
+                            <span class="value">{{ value }}</span>
+                            
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun résultat à afficher.</p>
+        {% endif %}
+    </div>
+    <script>
+    let previousScores = {};
+
+    function updatePoints() {
+        fetch('/get_score', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const currentScores = data.score; // Récupère les scores actuels depuis la réponse JSON
+            console.log('Scores actuels :', currentScores);
+
+            if (currentScores) {
+                const scoreContainer = document.querySelector('.score-container');
+                const teamElements = Array.from(scoreContainer.children);
+
+                // Mise à jour des scores affichés
+                teamElements.forEach(teamElement => {
+                    const teamName = teamElement.id.replace('-', ' ');
+                    const newScore = currentScores[teamName];
+                    const scoreSpan = teamElement.querySelector('.value');
+                    scoreSpan.textContent = newScore;
+                });
+
+                // Tri des équipes en fonction des nouveaux scores
+                const sortedTeams = teamElements.sort((a, b) => {
+                    const aScore = parseInt(a.querySelector('.value').textContent);
+                    const bScore = parseInt(b.querySelector('.value').textContent);
+                    return bScore - aScore;
+                });
+
+                // Comparer les nouvelles positions avec les anciennes et appliquer les animations
+                sortedTeams.forEach((teamElement, index) => {
+                    const teamName = teamElement.id.replace('-', ' ');
+                    const newPosition = index;
+                    const previousPosition = teamElements.indexOf(teamElement);
+
+                    if (previousPosition !== -1) {
+                        if (newPosition < previousPosition) {
+                            teamElement.classList.add('team-up');
+                        } else if (newPosition > previousPosition) {
+                            teamElement.classList.add('team-down');
+                        }
+
+                        setTimeout(() => {
+                            teamElement.classList.remove('team-up', 'team-down');
+                        }, 2000); // Ajuster la durée d'animation si nécessaire
+                    }
+                });
+
+                // Réorganiser les éléments dans le DOM
+                sortedTeams.forEach(team => scoreContainer.appendChild(team));
+
+                // Mettre à jour les scores précédents avec les scores actuels
+                previousScores = { ...currentScores };
+
+                // Ajouter le laurier à l'équipe ayant le plus de points
+                addLaurierToTopTeam();
+            } else {
+                alert('Erreur lors de la mise à jour des scores.');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la mise à jour des scores:', error);
+            alert('Erreur lors de la mise à jour des scores.');
+        });
+    }
+
+    // Fonction pour ajouter le laurier à l'équipe ayant le plus de points
+    function addLaurierToTopTeam() {
+        // Retirer le laurier de toutes les équipes
+        document.querySelectorAll('.laurier').forEach(laurier => {
+            laurier.innerHTML = '';
+        });
+
+        // Ajouter le laurier à l'équipe en tête
+        const topTeamElement = document.querySelector('.score-container').firstElementChild;
+        const laurierSpan = topTeamElement.querySelector('.laurier');
+        laurierSpan.innerHTML = '<img src="/static/laurier.png" alt="Laurier" />';
+    }
+
+    // Appel initial de la fonction
+    updatePoints();
+
+    // Rafraîchissement toutes les 5 secondes
+    setInterval(updatePoints, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if 'username' in session %}
+    <header>
+        <a href="{{ url_for('index') }}" class="btn" class="header">Accueil</a>
+        <span class="username" class="header">{{ session['username'] }}</span>
+        <a href="/logout" class="btn" class="header">Déconnexion</a>
+        
+    </header>
+    <h1 class="title">Wardlexis Game</h1>
+    <div class="container">
+        <div class="attempts">
+            <div id="attempts-list">
+                {% for _ in range(5) %}
+                    <div class="attempt">
+                        {% for _ in range(5) %}
+                            <div class="letter-box">
+                                <span class="blank">_</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <form id="wordle-form" class="word-form">
+            <input type="text" id="word" name="word" required>
+        </form>
+        <div id="result"></div>
+        <div class="alphabet" id="alphabet">
+            <div class="row">
+                {% for letter in "azertyuiop" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for letter in "qsdfghjklm" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+            </div>
+            <div class="row"> 
+                <button id="enter" class="small-btn">&#8617;</button>
+                {% for letter in "wxcvbn" %}
+                    <div class="letter grey" id="letter-{{ letter }}">{{ letter }}</div>
+                {% endfor %}
+                <button id="backspace" class="small-btn">&#8653;</button>
+
+            </div>
+        
+            <div class="row">
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="popup"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script type="text/javascript" src="https://livejs.com/live.js"></script>
+    {% else %}
+        <meta http-equiv="refresh" content="0; url={{ url_for('index') }}">
+    {% endif %}
+</body>
+</html>

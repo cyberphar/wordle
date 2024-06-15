@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats des équipes</title>
+</head>
+<body>
+    <h1>Résultats Wordle</h1>
+    {% if scores %}
+        {% for score, value in scores.items() %}
+            <p id="{{ score }}">{{ score }} : <span>{{ value }}</span>
+                <button onclick="updatePoints('{{ score }}', 1)">Ajouter 1 point</button>
+                <button onclick="updatePoints('{{ score }}', -1)">Enlever 1 point</button>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>Aucun résultat à afficher.</p>
+    {% endif %}
+
+    <script>
+        function updatePoints(team, delta) {
+            fetch('/update_points', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ team: team, delta: delta })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const teamElement = document.getElementById(team);
+                    const scoreSpan = teamElement.querySelector('span');
+                    scoreSpan.textContent = data.new_score;
+                } else {
+                    alert('Erreur lors de la mise à jour du score.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
