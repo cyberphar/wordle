@@ -1,0 +1,6 @@
+# Ignore all JSON files
+*.json
+
+# Other rules can be added here
+# For example, ignore the node_modules directory
+node_modules/
